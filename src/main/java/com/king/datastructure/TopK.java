@@ -8,19 +8,27 @@ package com.king.datastructure;
  */
 public class TopK {
 	private static final int TOPN = 15;
-	private int[] userId = null;
-	private int[] score = null;
+	private long[] userId = null;
+	private long[] score = null;
 	
 	public TopK() {
-		userId = new int[TOPN];
-		score = new int[TOPN];
+		userId = new long[TOPN];
+		score = new long[TOPN];
 		for (int i = 0; i < TOPN; i++) {
 			userId[i] = Integer.MIN_VALUE;
 			score[i] = Integer.MIN_VALUE;
 		}
 	}
-	
-	private void moveInsert(int index, int newUser, int newScore) {
+
+	public long[] getUserId() {
+		return userId;
+	}
+
+	public long[] getScore() {
+		return score;
+	}
+
+	private void moveInsert(int index, long newUser, long newScore) {
 		for (int i = 0; i < index; i++) {
 			userId[i] = userId[i+1];
 			score[i] = score[i+1];
@@ -30,7 +38,7 @@ public class TopK {
 		score[index] = newScore;
 	}
 	
-	public void insert(int newUser, int newScore) {
+	public void insert(long newUser, long newScore) {
 		if (newScore < score[0]) {
 			return;
 		}

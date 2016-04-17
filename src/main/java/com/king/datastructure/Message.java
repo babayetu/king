@@ -2,12 +2,12 @@ package com.king.datastructure;
 
 public class Message {
 	private String name;
-	private int userId;
+	private long userId;
 	private long score;
-	private int level;
+	private long level;
 	
 	
-	public Message(String name, int userId, long score, int level) {
+	public Message(String name, long userId, long score, long level) {
 		this.name = name;
 		this.userId = userId;
 		this.score = score;
@@ -20,10 +20,10 @@ public class Message {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getUserId() {
+	public long getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 	public long getScore() {
@@ -32,10 +32,10 @@ public class Message {
 	public void setScore(long score) {
 		this.score = score;
 	}
-	public int getLevel() {
+	public long getLevel() {
 		return level;
 	}
-	public void setLevel(int level) {
+	public void setLevel(long level) {
 		this.level = level;
 	}
 

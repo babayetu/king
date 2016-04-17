@@ -3,6 +3,8 @@ package com.king.server;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +17,8 @@ import com.sun.net.httpserver.HttpServer;
 
 public class ScoreServer {
 	private static BlockingQueue<Message> queue = new ArrayBlockingQueue<>(100);
-	private static ConcurrentHashMap<Integer, TopK>	scoreArray = new ConcurrentHashMap<Integer, TopK>();
+	private static ConcurrentHashMap<Long, TopK>	scoreArray = new ConcurrentHashMap<Long, TopK>();
+	private static ConcurrentHashMap<Long, String>	userToSession = new ConcurrentHashMap<Long, String>();
 	
     public static void main(String[] args) throws IOException {
     	/**
@@ -24,7 +27,7 @@ public class ScoreServer {
     	int consumerThreads = 10;
         ArrayList<Runnable> consumeri = new ArrayList<Runnable>();
         for (int i = 0; i < consumerThreads; i++) {
-        	consumeri.add(new Consumer("consumer-" + i,queue));
+        	consumeri.add(new Consumer("consumer-" + i,queue, scoreArray));
 		}
         for (int i = 0; i < consumerThreads; i++) {
         	new Thread(consumeri.get(i)).start();
@@ -36,7 +39,7 @@ public class ScoreServer {
         InetSocketAddress addr = new InetSocketAddress(18080);
         HttpServer server = HttpServer.create(addr, 0);
 
-        server.createContext("/", new OverallHandler(queue,scoreArray));
+        server.createContext("/", new OverallHandler(queue,userToSession,scoreArray));
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
         System.out.println("Server is listening on port 18080");

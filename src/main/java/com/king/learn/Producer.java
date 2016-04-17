@@ -1,6 +1,8 @@
-package com.king.datastructure;
+package com.king.learn;
 
 import java.util.concurrent.BlockingQueue;
+
+import com.king.datastructure.Message;
 
 public class Producer implements Runnable {
 	private BlockingQueue<Message> queue;
