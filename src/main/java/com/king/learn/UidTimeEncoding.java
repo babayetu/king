@@ -4,6 +4,12 @@ import java.util.AbstractMap;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * syntax sandbox 
+ * @author liujingjing
+ *
+ */
+@Deprecated
 public class UidTimeEncoding {
 	public static void main(String[] args) {
 		System.out.println((char)('A' + 1));

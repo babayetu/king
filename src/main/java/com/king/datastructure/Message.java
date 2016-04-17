@@ -1,5 +1,10 @@
 package com.king.datastructure;
 
+/**
+ * message definition, used by producer and consumer
+ * @author liujingjing
+ *
+ */
 public class Message {
 	private String name;
 	private long userId;

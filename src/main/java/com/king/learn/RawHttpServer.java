@@ -14,6 +14,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
+/**
+ * syntax sandbox 
+ * @author liujingjing
+ *
+ */
+@Deprecated
 public class RawHttpServer {
     public static void main(String[] args) throws IOException {
         InetSocketAddress addr = new InetSocketAddress(18080);

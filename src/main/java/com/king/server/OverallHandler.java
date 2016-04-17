@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.AbstractMap;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+//import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.king.datastructure.Message;
 import com.king.datastructure.TopK;
@@ -22,6 +20,11 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+/**
+ * dispatcher based on url
+ * @author liujingjing
+ *
+ */
 public class OverallHandler implements HttpHandler {
 	private BlockingQueue<Message> queue;
 	private ConcurrentHashMap<Long, String> userToSession;
@@ -45,8 +48,6 @@ public class OverallHandler implements HttpHandler {
     	
     	String urlPath = requestURI.getPath();
     	String method = exchange.getRequestMethod();
-    	
-    	System.out.println("method:" + method);
     	
     	String[] pathArray = urlPath.split("/");
     	
@@ -153,10 +154,12 @@ public class OverallHandler implements HttpHandler {
     }
     
     /**
-     * handler post user score function, asynchronize request to consumer function to process hashmap
-     * @param exchange - long, to hold unsigned int value
-     * @param levelId - long, to hold unsigned int value
-     * @param score - long, to hold unsigned int value
+     * handler post user score function, 
+     * producer message to consumer, let consumer update topK(because it is time consuming operation)
+     * 
+     * @param exchange - long, to hold unsigned int value, java does not support unsigned int type
+     * @param levelId - long, to hold unsigned int value, java does not support unsigned int type
+     * @param score - long, to hold unsigned int value, java does not support unsigned int type
      * @param sessionkey
      * @throws IOException
      * @throws InterruptedException
@@ -177,6 +180,12 @@ public class OverallHandler implements HttpHandler {
     	return;
     }
     
+    /**
+     * handler get high score list function
+     * @param exchange
+     * @param levelId
+     * @throws IOException
+     */
     private void getHighScoreHandler(HttpExchange exchange, long levelId) throws IOException {
     	TopK topK = scoreArray.get(levelId);
     	
@@ -195,19 +204,18 @@ public class OverallHandler implements HttpHandler {
 					sb.append(userId[i]).append("=").append(scoreId[i]).append(",");
 				}
 			}
-    		
-    		//remove last comma
-    		String retStr = sb.toString();
-    		String newRet = null;
-    		if (! retStr.equals("") && retStr.charAt(retStr.length() - 1) == ',') {
-    			newRet = retStr.substring(0, retStr.length() - 2);
-    		}
-    		buildResponse(exchange,newRet);
+
+    		buildResponse(exchange,sb.toString());
     		return;
     	}
     }
     
-    
+    /**
+     * build positive response
+     * @param exchange
+     * @param resp
+     * @throws IOException
+     */
     private void buildResponse(HttpExchange exchange, String resp) throws IOException {
 		Headers responseHeaders = exchange.getResponseHeaders();
         responseHeaders.set("Content-Type", "text/plain");
@@ -217,7 +225,7 @@ public class OverallHandler implements HttpHandler {
     	responseBody.close();
     }
     /**
-     * common error response handler
+     * build common error response 
      * @param exchange
      * @param msg
      * @throws IOException

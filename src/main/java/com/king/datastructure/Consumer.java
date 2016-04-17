@@ -2,7 +2,17 @@ package com.king.datastructure;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+//import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * TopK data structure updater
+ * Producer use queue ad async mechanism, it just put message in queue and return response to client
+ * This consumer is in charge of update TopK structure
+ * Http client will get high performance and throughput.
+ * 
+ * @author liujingjing
+ *
+ */
 public class Consumer implements Runnable {
 	private BlockingQueue<Message> queue;
 	private String name;
@@ -31,7 +41,7 @@ public class Consumer implements Runnable {
             		newTopK.insert(msg.getUserId(), msg.getScore());
             		scoreArray.put(msg.getLevel(), newTopK);
             	} else {
-            		topK.insert(msg.getUserId(), msg.getScore());
+            		topK.insert(msg.getUserId(), msg.getScore());         		
             	}
             }
         }catch(InterruptedException e) {

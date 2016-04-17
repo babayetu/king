@@ -4,6 +4,12 @@ import java.util.concurrent.BlockingQueue;
 
 import com.king.datastructure.Message;
 
+/**
+ * syntax sandbox 
+ * @author liujingjing
+ *
+ */
+@Deprecated
 public class Producer implements Runnable {
 	private BlockingQueue<Message> queue;
 	
