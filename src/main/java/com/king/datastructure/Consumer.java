@@ -32,7 +32,7 @@ public class Consumer implements Runnable {
             Message msg;
             //获取并处理消息直到接收到“exit”消息
             while((msg = queue.take()).getName() !="exit"){
-            	System.out.println(name + " Consumed "+msg);
+//            	System.out.println(name + " Consumed "+msg);
             	
             	TopK topK = scoreArray.get(msg.getLevel());
             	
